@@ -12,7 +12,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnPlayView = null;
 
-    private RoundProgressBar roundProgressBar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        roundProgressBar = findViewById(R.id.roundprogressbar);
         btnPlayView = findViewById(R.id.btn_playview);
     }
 
@@ -34,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_playview:
-                        roundProgressBar.startScan(0, 80);
                         break;
                     default:
                         break;

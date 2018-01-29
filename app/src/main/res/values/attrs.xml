@@ -14,4 +14,8 @@
             <enum name="FILL" value="1"/>
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="BezierView">
+
+    </declare-styleable>
 </resources>
