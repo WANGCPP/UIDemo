@@ -18,4 +18,8 @@
     <declare-styleable name="BezierView">
 
     </declare-styleable>
+
+    <declare-styleable name="DynamicLayoutView">
+        <attr name="star_count" format="integer"/>
+    </declare-styleable>
 </resources>
