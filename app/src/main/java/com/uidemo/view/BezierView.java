@@ -45,6 +45,11 @@ public class BezierView extends View implements View.OnTouchListener {
      */
     private float mYCoordinate = 600;
 
+    /**
+     * 曲线是否正在回弹,若正在回弹，则不响应onTouch()事件
+     */
+    private boolean isRebounding = false;
+
     public BezierView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
@@ -65,7 +70,6 @@ public class BezierView extends View implements View.OnTouchListener {
         mPaint.setStrokeWidth(10);
         mPaint.setColor(Color.parseColor("#FF0000"));
 
-        //TODO: 贝塞尔曲线
         mPath.moveTo(200, 600);
         mPath.quadTo(mXCoordinate, mYCoordinate, 400, 600);
 
@@ -77,6 +81,10 @@ public class BezierView extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+
+        if (isRebounding) {
+            return true;
+        }
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_BUTTON_PRESS:
@@ -111,12 +119,13 @@ public class BezierView extends View implements View.OnTouchListener {
     private synchronized void moveBack(final float offsetXCoordinate, final float offsetYCoordinate) {
         float stepYCoordinate;
         float stepXCoordinate;
-        stepYCoordinate = offsetYCoordinate / 2000;
-        stepXCoordinate = offsetXCoordinate / 2000;
+        stepYCoordinate = offsetYCoordinate / 50;
+        stepXCoordinate = offsetXCoordinate / 50;
 
         while (true) {
-            Log.d(TAG, "x == " + mXCoordinate + " y == " + mYCoordinate);
-            if (Math.abs(300 - mXCoordinate) < 0.01 || Math.abs(600 - mYCoordinate) < 0.01) {
+            //TODO: 曲线回弹的终止条件有bug，可能出现回弹无法停止的情况
+            if (Math.abs(300 - mXCoordinate) < 0.1 || Math.abs(600 - mYCoordinate) < 0.1) {
+                isRebounding = false;
                 break;
             }
             mYCoordinate += stepYCoordinate;
@@ -130,10 +139,10 @@ public class BezierView extends View implements View.OnTouchListener {
                 e.printStackTrace();
             }
         }
-
     }
 
     private void rebound(final float offsetXCoordinate, final float offsetYCoordinate) {
+        isRebounding = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
