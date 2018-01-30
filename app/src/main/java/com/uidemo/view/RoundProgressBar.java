@@ -10,7 +10,9 @@ import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.uidemo.R;
 
@@ -18,7 +20,7 @@ import com.uidemo.R;
  * Created by WANGCPP on 2018/1/25.
  * 环形进度条
  */
-public class RoundProgressBar extends View {
+public class RoundProgressBar extends View implements View.OnTouchListener {
 
     private static final String TAG = RoundProgressBar.class.getSimpleName();
 
@@ -109,6 +111,11 @@ public class RoundProgressBar extends View {
      */
     private boolean stopRunning = false;
 
+    /**
+     * 获取自身的LayoutParams对象
+     */
+    private ViewGroup.LayoutParams mLayoutParams = null;
+
     public RoundProgressBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
@@ -125,6 +132,7 @@ public class RoundProgressBar extends View {
         typedArray.recycle();
 
         mPaint = new Paint();
+        setOnTouchListener(this);
 
     }
 
@@ -166,17 +174,57 @@ public class RoundProgressBar extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(TAG, "onMeasure()");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);   //获取宽的模式
         int heightMode = MeasureSpec.getMode(heightMeasureSpec); //获取高的模式
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);   //获取宽的尺寸
         int heightSize = MeasureSpec.getSize(heightMeasureSpec); //获取高的尺寸
-        Log.d(TAG, "宽的模式:" + widthMode);
-        Log.d(TAG, "高的模式:" + heightMode);
-        Log.d(TAG, "宽的尺寸:" + widthSize);
-        Log.d(TAG, "高的尺寸:" + heightSize);
+//        Log.d(TAG, "宽的模式:" + widthMode);
+//        Log.d(TAG, "高的模式:" + heightMode);
+//        Log.d(TAG, "宽的尺寸:" + widthSize);
+//        Log.d(TAG, "高的尺寸:" + heightSize);
     }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        Log.d(TAG, "onLayout changed == " + changed + " left==" + left + " top==" + top + " right==" + right + " bottom==" + bottom);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        mLayoutParams = getLayoutParams();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                expandView();
+                break;
+            case MotionEvent.ACTION_UP:
+                shrinkView();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void expandView() {
+        if (null != mLayoutParams) {
+            mLayoutParams.width = 366;
+            mLayoutParams.height = 374;
+            this.setLayoutParams(mLayoutParams);
+        }
+    }
+
+    private void shrinkView() {
+        if (null != mLayoutParams) {
+            mLayoutParams.width = 244;
+            mLayoutParams.height = 249;
+            this.setLayoutParams(mLayoutParams);
+        }
+    }
+
 
     @Override
     protected void onDetachedFromWindow() {
@@ -184,6 +232,7 @@ public class RoundProgressBar extends View {
         stopRunning = true;
         super.onDetachedFromWindow();
     }
+
 
     public synchronized int getMax() {
         return max;
@@ -312,5 +361,6 @@ public class RoundProgressBar extends View {
     public void setScanSpeed(int scanSpeed) {
         this.scanSpeed = scanSpeed;
     }
+
 
 }
