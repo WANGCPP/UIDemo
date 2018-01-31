@@ -1,11 +1,15 @@
 package com.uidemo;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton ibSearch = null;
 
+    private NavigationView navigationView = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         ibSearch = findViewById(R.id.ib_search);
         btnPlayView = findViewById(R.id.btn_playview);
+        navigationView = findViewById(R.id.nav);
     }
 
     private void initEvent() {
@@ -59,5 +66,25 @@ public class MainActivity extends AppCompatActivity {
 
         ibSearch.setOnClickListener(clickListener);
         btnPlayView.setOnClickListener(clickListener);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.popup_add:
+                        Toast.makeText(MainActivity.this,"添加",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.popup_delete:
+                        Toast.makeText(MainActivity.this,"删除",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.popup_more:
+                        Toast.makeText(MainActivity.this,"更多",Toast.LENGTH_SHORT).show();
+                        break;
+                        default:
+                            break;
+                }
+                return true;
+            }
+        });
     }
 }

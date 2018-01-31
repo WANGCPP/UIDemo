@@ -96,8 +96,7 @@
         android:layout_gravity="left"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navigation_head"
-        app:menu="@menu/menu1"
-        >
+        app:menu="@menu/nav_menu">
 
     </android.support.design.widget.NavigationView>
 
