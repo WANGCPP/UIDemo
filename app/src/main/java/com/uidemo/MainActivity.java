@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.ib_search:
-                        Intent intent = new Intent(MainActivity.this,SearchActivity.class);
+                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.right, R.anim.left);
                         break;
