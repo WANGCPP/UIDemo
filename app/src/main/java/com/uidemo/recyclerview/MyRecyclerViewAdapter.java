@@ -18,66 +18,120 @@ import java.util.List;
  * Created by WANGCPP on 2018/2/1.
  * RecyclerView适配器
  */
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.MyViewHolder> {
+public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final String TAG = MyRecyclerViewAdapter.class.getSimpleName();
 
     private Context mContext = null;
 
     /**
-     * 数据表----一级数据
+     * 代表group item
      */
-    private List<String> mDataList_Level1 = new ArrayList<>();
+    private final int ITEM_TYPE_GROUP = 0;
 
     /**
-     * 数据表----二级数据
+     * 代表sub item
      */
-    private List<String> mDataList_Level2 = new ArrayList<>();
+    private final int ITEM_TYPE_SUB = 1;
+
+    /**
+     * 数据表----一级数据
+     */
+    private List<DataBean> mDataBeanList = new ArrayList<>();
+
+    private List<ItemStatus> mItemStatus = new ArrayList<>();
 
     public MyRecyclerViewAdapter(Context context) {
         this.mContext = context;
-        initDataList();
+        initDataBeanList();
     }
 
-    private void initDataList() {
+    private void initDataBeanList() {
         for (int i = 0; i < 10; i++) {
-            mDataList_Level1.add("item " + i);
+            DataBean dataBean = new DataBean();
+            dataBean.setGroupId(i);
+            dataBean.setGroupTitle("group " + i);
+            dataBean.setSubTitle("sub " + i);
+            mDataBeanList.add(dataBean);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            ItemStatus itemStatus = new ItemStatus();
+            itemStatus.setGroupId(i);
+            itemStatus.setViewType(ITEM_TYPE_GROUP);
+            mItemStatus.add(itemStatus);
         }
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_recyclerview_item, parent, false);
-        return new MyViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder()");
+        View view;
+        if (viewType == ITEM_TYPE_GROUP) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.layout_recycview_group_item, parent, false);
+            return new GroupViewHolder(view);
+        } else {
+            view = LayoutInflater.from(mContext).inflate(R.layout.layout_recycview_sub_item, parent, false);
+            return new SubViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.setData(mDataList_Level1.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "position == " + position);
-            }
-        });
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+
+        final DataBean dataBean = mDataBeanList.get(mItemStatus.get(position).getGroupId()); // 获取对应group的数据
+        if (holder.getItemViewType() == ITEM_TYPE_GROUP) {
+            Log.d(TAG, "group position == " + position);
+            final GroupViewHolder groupViewHolder = (GroupViewHolder) holder;
+            groupViewHolder.setData(dataBean);
+            groupViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mItemStatus.get(groupViewHolder.getAdapterPosition()).getIsOpen()) { // 如果该group已经打开
+                        mItemStatus.get(groupViewHolder.getAdapterPosition()).setIsOpen(false);
+                        mItemStatus.remove(groupViewHolder.getAdapterPosition() + 1);
+                        notifyItemRemoved(groupViewHolder.getAdapterPosition() + 1); // 关闭子项
+                    } else {
+                        ItemStatus itemStatus = new ItemStatus();
+                        itemStatus.setGroupId(dataBean.getGroupId());
+                        itemStatus.setViewType(ITEM_TYPE_SUB);
+                        mItemStatus.get(groupViewHolder.getAdapterPosition()).setIsOpen(true);
+                        mItemStatus.add(groupViewHolder.getAdapterPosition() + 1, itemStatus);
+                        notifyItemInserted(groupViewHolder.getAdapterPosition() + 1); // 打开子项
+                    }
+
+                }
+            });
+        } else {
+            Log.d(TAG, "sub position == " + position);
+            final SubViewHolder subViewHolder = (SubViewHolder) holder;
+            subViewHolder.setData(dataBean);
+        }
     }
 
 
     @Override
     public int getItemCount() {
-        return mDataList_Level1.size();
+//        Log.d(TAG, "getItemCount()");
+        return mItemStatus.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+//        Log.d(TAG, "getItemViewType() = " + position);
+        return mItemStatus.get(position).getViewType();
     }
 
     /**
-     * recyclerview 中item对应的viewholder
+     * recyclerview 中GroupItem对应的一级viewholder
      */
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class GroupViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textView = null;
 
         private ImageButton pullDown_btn = null;
 
-        MyViewHolder(View view) {
+        GroupViewHolder(View view) {
             super(view);
             initView(view);
             initEvent();
@@ -105,9 +159,34 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             pullDown_btn.setOnClickListener(clickListener);
         }
 
-        public void setData(String string) {
-            textView.setText(string);
+        public void setData(DataBean dataBean) {
+            textView.setText(dataBean.getGroupTitle());
         }
 
+    }
+
+    /**
+     * recyclerview 中SubItem对应的二级viewholder
+     */
+    class SubViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tvSubTitle = null;
+
+        public SubViewHolder(View itemView) {
+            super(itemView);
+            initView(itemView);
+            initEvent();
+        }
+
+        private void initView(View view) {
+            tvSubTitle = view.findViewById(R.id.subtitle);
+        }
+
+        private void initEvent() {
+        }
+
+        public void setData(DataBean dataBean) {
+            tvSubTitle.setText(dataBean.getSubTitle());
+        }
     }
 }
