@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -63,6 +64,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    /**
+     * 根据viewtype 创建不同类型的viewholder
+     * @param parent parent
+     * @param viewType viewtype
+     * @return viewholder对象
+     */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder()");
@@ -76,6 +83,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    /**
+     * viewholder绑定数据
+     * @param holder viewholder对象
+     * @param position item 位置
+     */
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
@@ -99,9 +111,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         mItemStatus.add(groupViewHolder.getAdapterPosition() + 1, itemStatus);
                         notifyItemInserted(groupViewHolder.getAdapterPosition() + 1); // 打开子项
                     }
-
                 }
             });
+
         } else {
             Log.d(TAG, "sub position == " + position);
             final SubViewHolder subViewHolder = (SubViewHolder) holder;
@@ -116,6 +128,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return mItemStatus.size();
     }
 
+    /**
+     * 获取对应item位置的viewtype
+     * @param position item位置
+     * @return viewtype
+     */
     @Override
     public int getItemViewType(int position) {
 //        Log.d(TAG, "getItemViewType() = " + position);
@@ -157,6 +174,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             };
             pullDown_btn.setOnClickListener(clickListener);
+
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d(TAG,"onLongClick()");
+                    return true; // 此处返回true,消费点击事件
+                }
+            });
         }
 
         public void setData(DataBean dataBean) {

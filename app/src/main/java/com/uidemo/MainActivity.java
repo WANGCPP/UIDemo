@@ -11,12 +11,14 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.uidemo.recyclerview.MyRecyclerViewAdapter;
+import com.uidemo.view.MyScrollView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NavigationView navigationView = null;
 
-    private RecyclerView recyclerView = null;
+    private MyScrollView myScrollView = null;
 
 
     @Override
@@ -46,21 +48,21 @@ public class MainActivity extends AppCompatActivity {
         btnPlayView = findViewById(R.id.btn_playview);
         navigationView = findViewById(R.id.nav);
 
-        recyclerView = findViewById(R.id.recycler_view);
+        myScrollView = findViewById(R.id.myScrollView);
 
-        /**
-         * RecyclerView.LayoutManager是一个抽象类，系统为我们提供了三个实现类
-         *LinearLayoutManager即线性布局，这个是在上面的例子中我们用到的布局
-         *GridLayoutManager即表格布局
-         *StaggeredGridLayoutManager即流式布局，如瀑布流效果
-         */
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        //设置布局管理器
-        recyclerView.setLayoutManager(layoutManager);
-        //设置为垂直布局
-        layoutManager.setOrientation(OrientationHelper.VERTICAL);
-        //设置Adapter
-        recyclerView.setAdapter(new MyRecyclerViewAdapter(MainActivity.this));
+//        /**
+//         * RecyclerView.LayoutManager是一个抽象类，系统为我们提供了三个实现类
+//         *LinearLayoutManager即线性布局，这个是在上面的例子中我们用到的布局
+//         *GridLayoutManager即表格布局
+//         *StaggeredGridLayoutManager即流式布局，如瀑布流效果
+//         */
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        //设置布局管理器
+//        recyclerView.setLayoutManager(layoutManager);
+//        //设置为垂直布局
+//        layoutManager.setOrientation(OrientationHelper.VERTICAL);
+//        //设置Adapter
+//        recyclerView.setAdapter(new MyRecyclerViewAdapter(MainActivity.this));
 
     }
 

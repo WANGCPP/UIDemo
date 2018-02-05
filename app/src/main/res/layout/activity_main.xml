@@ -71,14 +71,13 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="344dp"
-            android:layout_height="414dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+        <com.uidemo.view.MyScrollView
+            android:id="@+id/myScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="252dp"
+            android:layout_marginTop="159dp"
+            android:text="com.uidemo.view.MyScrollView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
