@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.uidemo.view.DragLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="#AEB5C1">
+
+    <ImageView
+        android:id="@+id/view1_draglayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FF0A05"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.106"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/view2_draglayout"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="0dp"
+        android:background="#5BFF48"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/view1_draglayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"/>
+</com.uidemo.view.DragLayout>
+

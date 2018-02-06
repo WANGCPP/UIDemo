@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,10 +19,13 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.uidemo.recyclerview.MyRecyclerViewAdapter;
+import com.uidemo.view.DragLayout;
 import com.uidemo.view.MyScrollView;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar toolbar = null;
 
@@ -31,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NavigationView navigationView = null;
 
-    private MyScrollView myScrollView = null;
+    private DragLayout dragLayout = null;
 
 
     @Override
@@ -48,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         btnPlayView = findViewById(R.id.btn_playview);
         navigationView = findViewById(R.id.nav);
 
-        myScrollView = findViewById(R.id.myScrollView);
+        dragLayout = findViewById(R.id.draglayout);
+
 
 //        /**
 //         * RecyclerView.LayoutManager是一个抽象类，系统为我们提供了三个实现类
@@ -87,6 +92,15 @@ public class MainActivity extends AppCompatActivity {
 
         ibSearch.setOnClickListener(clickListener);
         btnPlayView.setOnClickListener(clickListener);
+
+        //TODO:实现onClick之后，侧滑无法响应
+        dragLayout.getDragView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d(TAG, "onLongClick");
+                return true;
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
