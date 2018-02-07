@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.OverScroller;
 
 import com.uidemo.R;
 
@@ -61,14 +60,11 @@ public class DragLayout extends ConstraintLayout {
     private ViewDragHelper.Callback mCallback = new ViewDragHelper.Callback() {
         @Override
         public boolean tryCaptureView(@NonNull View child, int pointerId) {
-            Log.d(TAG, "tryCaptureView == " + child.getId());
-            Log.d(TAG, "child id ==" + dragView.getId());
             return dragView.getId() == child.getId();
         }
 
         @Override
         public int clampViewPositionHorizontal(@NonNull View child, int left, int dx) {
-            Log.e(TAG, "left:" + left + "++++dx:" + dx);
             //两个if主要是让view在ViewGroup中
             if (left < (getPaddingLeft() - trackView.getWidth())) {
                 return (getPaddingLeft() - trackView.getWidth());
@@ -82,7 +78,6 @@ public class DragLayout extends ConstraintLayout {
 
         @Override
         public int clampViewPositionVertical(@NonNull View child, int top, int dy) {
-            Log.e(TAG, "top:" + top + "++++dy:" + dy);
             //两个if主要是让view在ViewGroup中
             if (top < getPaddingTop()) {
                 return getPaddingTop();
@@ -101,22 +96,35 @@ public class DragLayout extends ConstraintLayout {
         }
 
         @Override
-        public int getViewHorizontalDragRange(@NonNull View child) {
-            return getMeasuredWidth() - child.getMeasuredWidth();
-        }
-
-        @Override
         public void onViewReleased(@NonNull View releasedChild, float xvel, float yvel) {
-            Log.d(TAG, "onViewReleased trackview width == " + trackView.getWidth() + "releaseChild left == " + releasedChild.getLeft());
-
             if (releasedChild.getLeft() < getPaddingLeft() - trackView.getWidth() / 3) {
-                Log.d(TAG, "little " + releasedChild.getLeft());
                 viewDragHelper.settleCapturedViewAt(targetLocation, 0);
             } else {
-                Log.d(TAG, "big");
                 viewDragHelper.settleCapturedViewAt(startLocation, 0);
             }
             invalidate();
+        }
+
+        @Override
+        public void onViewDragStateChanged(int state) {
+            super.onViewDragStateChanged(state);
+        }
+
+        @Override
+        public void onViewCaptured(@NonNull View capturedChild, int activePointerId) {
+            super.onViewCaptured(capturedChild, activePointerId);
+        }
+
+        /**
+         * 如果view是clickable的，必须要重写下面这个方法
+         * @param child 子View
+         * @return 移动范围（像素） 作用不是很清楚
+         */
+        @Override
+        public int getViewHorizontalDragRange(@NonNull View child) {
+            return 1;
+//            Log.d(TAG,"horizontal range == "+(getMeasuredWidth() - child.getMeasuredWidth()));
+//            return getMeasuredWidth() - child.getMeasuredWidth();
         }
     };
 
@@ -128,9 +136,19 @@ public class DragLayout extends ConstraintLayout {
         }
     }
 
+    /**
+     * ViewGroup 事件拦截器
+     *
+     * @param ev 触摸事件
+     * @return true:触摸事件被ViewGroup拦截，不在向子View分发  false:ViewGroup不拦截事件，向子View分发
+     */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return viewDragHelper.shouldInterceptTouchEvent(ev);
+        final boolean result = viewDragHelper.shouldInterceptTouchEvent(ev);
+        if (result) {
+            Log.d(TAG, "onInterceptTouchEvent");
+        }
+        return result;
     }
 
     @Override
@@ -139,10 +157,11 @@ public class DragLayout extends ConstraintLayout {
         return true;
     }
 
-    //获取拖拽的子View
+    /**
+     * 获取子View
+     */
     @Override
     protected void onFinishInflate() {
-        Log.d(TAG, "onFinishInflate()");
         super.onFinishInflate();
         dragView = findViewById(R.id.view1_draglayout);
         trackView = findViewById(R.id.view2_draglayout);
@@ -151,10 +170,8 @@ public class DragLayout extends ConstraintLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-
         startLocation = 0;
         targetLocation = -trackView.getWidth();
-
     }
 
     public View getDragView() {

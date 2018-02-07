@@ -5,10 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,9 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.uidemo.recyclerview.MyRecyclerViewAdapter;
 import com.uidemo.view.DragLayout;
-import com.uidemo.view.MyScrollView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -73,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initEvent() {
 
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        final View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -93,12 +87,10 @@ public class MainActivity extends AppCompatActivity {
         ibSearch.setOnClickListener(clickListener);
         btnPlayView.setOnClickListener(clickListener);
 
-        //TODO:实现onClick之后，侧滑无法响应
-        dragLayout.getDragView().setOnLongClickListener(new View.OnLongClickListener() {
+        dragLayout.getDragView().setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Log.d(TAG, "onLongClick");
-                return true;
+            public void onClick(View v) {
+                Log.d(TAG, "onClick()");
             }
         });
 
@@ -121,6 +113,5 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
     }
 }
