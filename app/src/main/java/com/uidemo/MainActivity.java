@@ -49,20 +49,6 @@ public class MainActivity extends AppCompatActivity {
         dragLayout = findViewById(R.id.draglayout);
 
 
-//        /**
-//         * RecyclerView.LayoutManager是一个抽象类，系统为我们提供了三个实现类
-//         *LinearLayoutManager即线性布局，这个是在上面的例子中我们用到的布局
-//         *GridLayoutManager即表格布局
-//         *StaggeredGridLayoutManager即流式布局，如瀑布流效果
-//         */
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        //设置布局管理器
-//        recyclerView.setLayoutManager(layoutManager);
-//        //设置为垂直布局
-//        layoutManager.setOrientation(OrientationHelper.VERTICAL);
-//        //设置Adapter
-//        recyclerView.setAdapter(new MyRecyclerViewAdapter(MainActivity.this));
-
     }
 
     private void initEvent() {
@@ -72,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.ib_search:
-                        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                        Intent intent = new Intent(MainActivity.this, SwipeRefreshActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.right, R.anim.left);
                         break;

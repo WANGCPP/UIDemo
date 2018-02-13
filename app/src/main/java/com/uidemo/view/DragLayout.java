@@ -54,7 +54,7 @@ public class DragLayout extends ConstraintLayout {
         this.mContext = context;
 
         viewDragHelper = ViewDragHelper.create(this, mCallback);
-        viewDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_ALL); // 添加边缘检测
+//        viewDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_ALL); // 添加边缘检测
     }
 
     private ViewDragHelper.Callback mCallback = new ViewDragHelper.Callback() {
@@ -91,8 +91,11 @@ public class DragLayout extends ConstraintLayout {
 
         @Override
         public void onViewPositionChanged(@NonNull View changedView, int left, int top, int dx, int dy) {
+            Log.d(TAG, "onViewPositionChanged left = " + left + " top =" + top);
             trackView.offsetLeftAndRight(dx);
             trackView.offsetTopAndBottom(dy);
+            trackView.setScaleX(1-(float)(263+left)/263);
+            trackView.setScaleY(1-(float)(263+left)/263);
         }
 
         @Override

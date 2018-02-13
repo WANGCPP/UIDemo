@@ -40,6 +40,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      */
     private List<DataBean> mDataBeanList = new ArrayList<>();
 
+    /**
+     * item 状态信息
+     */
     private List<ItemStatus> mItemStatus = new ArrayList<>();
 
     public MyRecyclerViewAdapter(Context context) {
